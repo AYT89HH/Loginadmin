@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Contact us</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            margin: 0;
+            background-color: #F0F0f0;
+        }
+        .contact-box {
+            border: 2px solid black;
+            padding: -10px 10px;
+            background-color: white;
+            text-align: center;
+        }
+        .contact-box h1 {
+            margin-bottom: 20px;
+        }
+        .contact-box textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            outline:none;
+            border : solid 2px black;
+            margin: -10px; 
+            padding: 10px;
+        }
+        .contact-box button {
+            padding: 10px 20px;
+            margin: 10px 10px;
+            background-color: white;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border : 2px solid black;
+            border-radius:0px ;
+            
+        }
+        .confirmation-box {
+            display: none;
+            text-align: center;
+        }
+        .confirmation-box button {
+            padding: 10px 20px;
+            background-color: #fff ;
+            color: black;
+            border: black 4px solid;
+            cursor: pointer;
+            border-radius :0px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="contact-box">
+        <h1>Contact us</h1>
+        <textarea id="userMessage" placeholder=" Write a message to the programmer..."></textarea>
+        <button onclick="sendMessage()">Send to the programmer </button>
+    </div>
+    <div class="confirmation-box">
+        <h1>Your request has been sent to the programmer.</h1>
+        <p>Thank you for contacting us.</p>
+        <button onclick="resetForm()">Resend again </button>
+    </div>
+ 
+    <script>
+        function sendMessage() {
+            const botToken = '7509225299:AAF9UyvAlML4oh6u7WvCNoX0_Imo0tBkQkU';
+            const chatId = '5687419212';
+            const userMessage = document.getElementById('userMessage').value;
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(userMessage)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        document.querySelector('.contact-box').style.display = 'none';
+                        document.querySelector('.confirmation-box').style.display = 'block';
+                    } else {
+         alert('An error occurred while sending the message..');
+                    }
+                })
+                .catch(error => {
+            alert('An error occurred while sending the message..');
+                });
+        }
+
+        function resetForm() {
+            document.querySelector('.confirmation-box').style.display = 'none';
+            document.querySelector('.contact-box').style.display = 'block';
+            document.getElementById('userMessage').value = '';
+        }
+    </script>
+</body>
+</html>
